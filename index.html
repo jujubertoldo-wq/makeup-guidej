@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Makeup Guide — Minha Make</title>
+<style>
+:root{--ink:#252022;--muted:#8b8084;--soft:#f7eef1;--line:#eee5e8;--accent:#9d6678}
+*{box-sizing:border-box} body{margin:0;background:#f7f5f5;color:var(--ink);font-family:Arial,sans-serif}
+.app{max-width:460px;min-height:100vh;margin:auto;background:#fff;padding:24px 20px 40px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px}
+.logo{font:24px Georgia,serif}.back{border:1px solid var(--line);background:white;border-radius:50%;width:40px;height:40px;font-size:18px}
+.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:10px;color:var(--accent);margin-bottom:9px}
+h1{font:400 35px/1.08 Georgia,serif;margin:0 0 12px}
+.intro{color:#777;line-height:1.55;font-size:14px;margin:0 0 27px}
+.uploads{display:grid;gap:14px}
+.box{border:1.5px dashed #d9cbd0;border-radius:22px;background:#fcfafb;overflow:hidden}
+.box-head{padding:17px 17px 10px}.box-title{font-weight:700;font-size:15px}.box-sub{font-size:12px;color:#999;margin-top:5px}
+.drop{margin:5px 14px 14px;height:145px;border-radius:16px;background:#f6edf0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}.placeholder{text-align:center;color:#8d7b81}.plus{font-size:28px;display:block;margin-bottom:5px}.placeholder small{font-size:11px}
+.preview{width:100%;height:100%;object-fit:cover;display:none}.remove{display:none;position:absolute;right:9px;top:9px;border:0;border-radius:50%;width:30px;height:30px;background:#fff;box-shadow:0 3px 12px #0002;z-index:2}
+.btn{width:100%;border:0;border-radius:17px;padding:16px;background:#242022;color:#fff;font-weight:700;font-size:15px;margin-top:18px;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.tip{text-align:center;color:#aaa;font-size:11px;line-height:1.5;margin:14px 10px}
+.hidden{display:none}
+.result{margin-top:30px;border-top:1px solid var(--line);padding-top:27px}
+.face-card{background:var(--soft);border-radius:24px;padding:20px;text-align:center}
+.face-title{font:22px Georgia,serif;margin-bottom:5px}.face-sub{font-size:12px;color:#877b7f}
+.face{width:180px;height:220px;background:#e2b49d;border-radius:48% 48% 45% 45%;margin:22px auto 10px;position:relative;box-shadow:0 10px 25px #0001}
+.hair{position:absolute;z-index:-1;left:-13px;top:-12px;width:206px;height:238px;background:#211c1d;border-radius:50% 50% 38% 38%}
+.eye{position:absolute;top:83px;width:29px;height:10px;border-top:2px solid #493735;border-radius:50%}.el{left:38px}.er{right:38px}
+.nose{position:absolute;left:89px;top:94px;width:2px;height:43px;background:#b77f6d55}.mouth{position:absolute;left:71px;top:151px;width:38px;height:13px;border-bottom:2px solid #995f64;border-radius:50%}
+.marker{position:absolute;border:3px solid #a75e78;background:#c8799138;border-radius:50%;display:none}
+.cheekL{width:45px;height:28px;left:15px;top:125px}.cheekR{width:45px;height:28px;right:15px;top:125px}
+.contourL{width:16px;height:82px;left:3px;top:87px;border-radius:50%}.contourR{width:16px;height:82px;right:3px;top:87px;border-radius:50%}
+.tutorial{margin-top:20px}.step{display:flex;gap:13px;align-items:flex-start;border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:10px}
+.num{min-width:31px;height:31px;border-radius:50%;background:#242022;color:#fff;display:grid;place-items:center;font-size:12px}
+.step b{font-size:14px}.step p{font-size:12px;color:#777;line-height:1.45;margin:5px 0 0}
+.status{font-size:12px;color:#80636c;text-align:center;margin-top:13px}
+</style>
+</head>
+<body>
+<main class="app">
+<header><div class="logo">makeup guide</div><button class="back" onclick="location.reload()">↺</button></header>
+
+<section id="setup">
+<div class="eyebrow">Seu guia personalizado</div>
+<h1>Vamos recriar<br>sua make?</h1>
+<p class="intro">Envie a maquiagem que você quer fazer e uma foto do seu rosto. O guia vai organizar os passos para você.</p>
+
+<div class="uploads">
+<div class="box">
+<div class="box-head"><div class="box-title">01 · Make de referência</div><div class="box-sub">A foto da maquiagem que você quer reproduzir.</div></div>
+<div class="drop">
+<div class="placeholder" id="p1"><span class="plus">＋</span><small>Toque para escolher uma foto</small></div>
+<img class="preview" id="img1">
+<button class="remove" id="r1">×</button><input type="file" accept="image/*" onchange="loadPhoto(this,1)">
+</div></div>
+
+<div class="box">
+<div class="box-head"><div class="box-title">02 · Seu rosto</div><div class="box-sub">De preferência, de frente e com boa iluminação.</div></div>
+<div class="drop">
+<div class="placeholder" id="p2"><span class="plus">＋</span><small>Toque para escolher uma foto</small></div>
+<img class="preview" id="img2">
+<button class="remove" id="r2">×</button><input type="file" accept="image/*" onchange="loadPhoto(this,2)">
+</div></div>
+</div>
+
+<div id="uploadStatus" class="status" style="margin-top:14px">Escolha as duas fotos para continuar.</div>
+<button class="btn" id="analyze" disabled onclick="analyze()">ANALISAR MINHA MAKE ✨</button>
+<p class="tip">Suas fotos ficam nesta página. Esta versão é um protótipo visual; a análise automática por IA será conectada na próxima etapa.</p>
+</section>
+
+<section id="result" class="result hidden">
+<div class="face-card">
+<div class="face-title">Seu mapa de aplicação</div>
+<div class="face-sub">Uma prévia de como o tutorial vai marcar as áreas do seu rosto.</div>
+<div class="face">
+<div class="hair"></div><div class="eye el"></div><div class="eye er"></div><div class="nose"></div><div class="mouth"></div>
+<div class="marker cheekL"></div><div class="marker cheekR"></div><div class="marker contourL"></div><div class="marker contourR"></div>
+</div>
+</div>
+<div class="tutorial">
+<div class="eyebrow" style="margin-top:25px">Tutorial</div>
+<div class="step"><div class="num">1</div><div><b>Preparação da pele</b><p>Hidrate e prepare a pele antes da maquiagem.</p></div></div>
+<div class="step"><div class="num">2</div><div><b>Contorno</b><p>As áreas laterais ficam destacadas para indicar onde aplicar e esfumar.</p></div></div>
+<div class="step"><div class="num">3</div><div><b>Blush</b><p>O mapa marca a região das maçãs e a direção da aplicação.</p></div></div>
+<div class="step"><div class="num">4</div><div><b>Olhos e acabamento</b><p>Depois entram sombra, delineado, máscara, iluminador e lábios conforme a referência.</p></div></div>
+</div>
+<div class="status" id="status">✨ Tutorial personalizado criado</div>
+<button class="btn" onclick="location.reload()">← Fazer outra make</button>
+</section>
+</main>
+
+<script>
+let photos=[false,false];
+function loadPhoto(input,n){
+ const file = input && input.files && input.files.length ? input.files[0] : null;
+ if(!file) return;
+
+ const img=document.getElementById('img'+n);
+ const ph=document.getElementById('p'+n);
+ const rm=document.getElementById('r'+n);
+
+ // FileReader is more reliable for local HTML files on iPhone/iOS.
+ const reader = new FileReader();
+ reader.onload = function(e){
+   img.src = e.target.result;
+   img.style.display='block';
+   ph.style.display='none';
+   rm.style.display='block';
+   photos[n-1]=true;
+   check();
+ };
+ reader.onerror = function(){
+   alert('Não consegui carregar esta foto. Tente escolher outra imagem da Fototeca.');
+   photos[n-1]=false;
+   check();
+ };
+ reader.readAsDataURL(file);
+
+ rm.onclick=()=>{
+   input.value='';
+   img.removeAttribute('src');
+   img.style.display='none';
+   ph.style.display='block';
+   rm.style.display='none';
+   photos[n-1]=false;
+   check();
+ };
+}
+function check(){
+ const ready = photos[0] && photos[1];
+ document.getElementById('analyze').disabled=!ready;
+ document.getElementById('uploadStatus').textContent =
+   ready ? '✨ As duas fotos foram recebidas!' :
+   (photos[0] ? '✓ A primeira foto foi recebida. Falta sua foto.' :
+   (photos[1] ? '✓ Sua foto foi recebida. Falta a referência.' :
+   'Escolha as duas fotos para continuar.');
+}
+function analyze(){
+ document.getElementById('setup').classList.add('hidden');
+ document.getElementById('result').classList.remove('hidden');
+ setTimeout(()=>document.querySelectorAll('.marker').forEach(x=>x.style.display='block'),350);
+}
+</script>
+</body>
+</html>
